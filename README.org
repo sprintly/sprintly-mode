@@ -1,0 +1,17 @@
+* sprintly-mode
+sprintly-mode is a small mode for http://sprint.ly/, a project
+management tool. It is a work in progress and pull requests and github
+issues are accepted.
+** Working Features
+** Future feature ideas
+- List your tickets.
+- Auto-complete inside a magit-commit buffer for ticket ids.
+- Create new tickets from within emacs.
+- Create branch of repository for working on a given feature.
+** Installation
+#+begin_src elisp
+M-x package-install sprintly
+
+(setq sprintly-email "me@mydomain.com"
+      sprintly-api-key "long-hex-here")
+#+end_src
