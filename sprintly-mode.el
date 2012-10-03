@@ -1,6 +1,6 @@
 ;;; sprintly-mode.el --- Major mode for dealing with sprint.ly
 
-;; Copyright (c) 2012, Justin Lilly
+;; Copyright (C) 2012 Justin Lilly
 ;; All rights reserved.
 
 ;; Redistribution and use in source and binary forms, with or without
