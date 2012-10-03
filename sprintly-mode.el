@@ -26,19 +26,23 @@
 ;; USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 ;; DAMAGE.
 
+;; Author: Justin Lilly <justin@justinlilly.com>
+;; URL: https://github.com/justinlilly/sprintly-mode
+;; Version: 0.0.1
+;; Package-Requires: ((furl "0.0.2"))
 
 ;;; Commentary:
 
-;; I think the final thing will look like:
-;; #1234 :story: :closed: As a ... I want .. so that .. 
-;; #1235 :task: :in-progress: Fix chef configs for...
-;; @@@ grouped by status or something?
-
 ;;; Code:
+(require 'furl)
+(require 'json)
 
 (defvar sprintly-mode-hook nil)
 (defvar sprintly-email nil)
 (defvar sprintly-api-key nil)
+(defvar sprintly-product-id nil)
+(defvar sprintly-user-id nil)
+(defvar sprintly-buffer-name "*sprintly*")
 
 ;;; @@@ What is the difference between make-sparse-keymap and
 ;;; make-keymap?
@@ -50,7 +54,7 @@
   "Keymap for `sprintly-mode'.")
 
 (defvar sprintly-font-lock-keywords
-  '(("#\\sd+" (1 font-lock-keyword-face)) ;;; tickets
+  '(("#\\d+" (1 font-lock-keyword-face)) ;;; tickets
     (":\\sd+:" (1 font-lock-keyword-face))) ;;; status / types
   "Keyword highlighting specification for `sprintly-mode'.")
 
@@ -66,19 +70,46 @@
   ;; (set-syntax-table sprintly-mode-syntax-table)
   (use-local-map sprintly-mode-map)
   ;; create a sprintly buffer
-  (get-buffer-create "*sprintly*")
+  (get-buffer-create sprintly-buffer-name)
   (run-hooks 'sprintly-mode-hook))
 
 (defun sprintly-open-item () 
   nil)
+
+(defun render-item (item)
+  (let* ((type (cdr (assoc 'type item)))
+	 (who (cdr (assoc 'who item)))
+	 (what (cdr (assoc 'what item)))
+	 (why (cdr (assoc 'why item)))
+	 (title (cdr (assoc 'title item)))
+	 ;; (desc (if (equal type "story")
+	 ;; 	   (format "As a %s I want to %s so that %s" who what why)
+	 ;; 	 (replace-regexp-in-string "" " " (cdr (assoc 'description item)))))
+	 (number (cdr (assoc 'number item)))
+	 (status (cdr (assoc 'status item)))
+	 )
+    (insert (format "#%-7s %-7s %-11s %s\n" number type status title))))
+
+(defun sprintly-show-item-list (response-string)
+  (with-current-buffer (get-buffer-create sprintly-buffer-name)
+    
+    (erase-buffer)
+    (let ((result (json-read-from-string response-string)))
+      (mapcar 'render-item result))))
+
 (defun sprintly-list-items ()
   (interactive)
-  (erase-buffer)
-  (insert "This is a test."))
+  (furl-with-header "Authorization" (concat "Basic " (base64-encode-string (concat sprintly-email ":" sprintly-api-key)))
+      (furl-retrieve (format "https://sprint.ly/api/products/%s/items.json?assigned_to=%s"
+			     sprintly-product-id
+			     sprintly-user-id
+			     )
+		     'sprintly-show-item-list)
+    ))
 
 (defun sprintly ()
   (interactive)
-  (with-current-buffer (get-buffer-create "*sprintly*")
+  (with-current-buffer (get-buffer-create sprintly-buffer-name)
     (sprintly-mode)
     (sprintly-list-items)
     (switch-to-buffer (current-buffer))))
