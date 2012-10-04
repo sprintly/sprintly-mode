@@ -84,7 +84,8 @@
 	 (title (cdr (assoc 'title item)))
 	 ;; (desc (if (equal type "story")
 	 ;; 	   (format "As a %s I want to %s so that %s" who what why)
-	 ;; 	 (replace-regexp-in-string "" " " (cdr (assoc 'description item)))))
+	 ;; 	 (replace-regexp-in-string "
+" " " (cdr (assoc 'description item)))))
 	 (number (cdr (assoc 'number item)))
 	 (status (cdr (assoc 'status item)))
 	 )
