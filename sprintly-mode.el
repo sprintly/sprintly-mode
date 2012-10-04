@@ -82,13 +82,6 @@
 	 (what (cdr (assoc 'what item)))
 	 (why (cdr (assoc 'why item)))
 	 (title (cdr (assoc 'title item)))
-	 ;; (desc (if (equal type "story")
-	 ;; 	   (format "As a %s I want to %s so that %s" who what why)
-	 ;; 	 (replace-regexp-in-string "
-" " " (cdr (assoc 'description item)))))
-	 (number (cdr (assoc 'number item)))
-	 (status (cdr (assoc 'status item)))
-	 )
     (insert (format "#%-7s %-7s %-11s %s\n" number type status title))))
 
 (defun sprintly-show-item-list (response-string)
