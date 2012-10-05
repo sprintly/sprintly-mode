@@ -28,7 +28,7 @@
 
 ;; Author: Justin Lilly <justin@justinlilly.com>
 ;; URL: https://github.com/sprintly/sprintly-mode
-;; Version: 0.0.1
+;; Version: 0.0.2
 ;; Package-Requires: ((furl "0.0.2"))
 
 ;;; Commentary:
@@ -82,7 +82,7 @@
 	 (what (cdr (assoc 'what item)))
 	 (why (cdr (assoc 'why item)))
 	 (title (cdr (assoc 'title item)))
-    (insert (format "#%-7s %-7s %-11s %s\n" number type status title))))
+    (insert (format "#%-7s %-7s %-11s %s\n" number type status title)))))
 
 (defun sprintly-show-item-list (response-string)
   (with-current-buffer (get-buffer-create sprintly-buffer-name)
