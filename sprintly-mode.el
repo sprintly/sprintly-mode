@@ -27,7 +27,7 @@
 ;; DAMAGE.
 
 ;; Author: Justin Lilly <justin@justinlilly.com>
-;; URL: https://github.com/justinlilly/sprintly-mode
+;; URL: https://github.com/sprintly/sprintly-mode
 ;; Version: 0.0.1
 ;; Package-Requires: ((furl "0.0.2"))
 
