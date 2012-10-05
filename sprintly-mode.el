@@ -109,4 +109,4 @@
     (switch-to-buffer (current-buffer))))
 
 (provide 'sprintly-mode)
-;;; sprintly.el ends here
+;;; sprintly-mode.el ends here
