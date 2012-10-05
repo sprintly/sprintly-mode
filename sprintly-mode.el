@@ -94,7 +94,7 @@
 (defun sprintly-list-items ()
   (interactive)
   (furl-with-header "Authorization" (concat "Basic " (base64-encode-string (concat sprintly-email ":" sprintly-api-key)))
-      (furl-retrieve (format "https://sprint.ly/api/products/%s/items.json?assigned_to=%s"
+      (furl-retrieve (format "https://sprint.ly/api/products/%s/items.json?assigned_to=%s&children=1&limit=100"
 			     sprintly-product-id
 			     sprintly-user-id
 			     )
