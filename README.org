@@ -14,6 +14,14 @@ issues are accepted.
 ** Known Issues
 - You need to find out your own user id. I did this by poking around
   in the json api.
+- Another alternative is to go to Sprintly and filter tasks clicking "Mine".
+
+It will be in the following format:
+
+https://sprint.ly/product/PRODUCT_ID/#!/items/#members=USER_ID&statuses=backlog,current&sub-items=true
+
+To learn the API key, see https://sprint.ly/account/profile/
+
 ** Installation
 #+begin_src elisp
   M-x package-install sprintly
