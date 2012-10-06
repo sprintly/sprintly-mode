@@ -4,9 +4,9 @@ management tool. It is a work in progress and pull requests and github
 issues are accepted.
 ** Working Features
 - List your tickets.
+- Nagivate to tickets.
 ** Future feature ideas
 - Group your tickets based on status.
-- Nagivate to tickets.
 - Auto-complete inside a magit-commit buffer for ticket ids. ie # key will open auto complete.
 - Create new tickets from within emacs.
 - Create branch of repository for working on a given feature.

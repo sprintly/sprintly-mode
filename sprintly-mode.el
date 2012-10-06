@@ -28,7 +28,7 @@
 
 ;; Author: Justin Lilly <justin@justinlilly.com>
 ;; URL: https://github.com/sprintly/sprintly-mode
-;; Version: 0.0.3
+;; Version: 0.0.4
 ;; Package-Requires: ((furl "0.0.2"))
 
 ;;; Commentary:
@@ -48,7 +48,7 @@
 ;;; make-keymap?
 (defvar sprintly-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [\r] 'sprintly-open-item)
+    (define-key map (kbd "RET") 'sprintly-open-item)
     (define-key map (kbd "C-c g")  'sprintly-list-items)
     map)
   "Keymap for `sprintly-mode'.")
@@ -73,8 +73,19 @@
   (get-buffer-create sprintly-buffer-name)
   (run-hooks 'sprintly-mode-hook))
 
-(defun sprintly-open-item () 
-  nil)
+(defun text-of-current-line ()
+  "Returns the text of point's current line as a string."
+  (buffer-substring-no-properties
+   (line-beginning-position)
+   (line-end-position)))
+
+(defun sprintly-open-item ()
+  (interactive)
+  (let* ((current-line (text-of-current-line))
+	 (item-number (when (string-match "^#\\([0-9]+\\)" current-line)
+			(match-string 1 current-line))))
+    (if (not (equal nil item-number))
+	(browse-url (format "https://sprint.ly/product/%s/#!/item/%s" sprintly-product-id item-number)))))
 
 (defun render-item (item)
   (let* ((type (cdr (assoc 'type item)))
@@ -85,9 +96,9 @@
 
 (defun sprintly-show-item-list (response-string)
   (with-current-buffer (get-buffer-create sprintly-buffer-name)
-    
     (erase-buffer)
-    (let ((result (json-read-from-string response-string)))
+    (let ((inhibit-read-only t)
+	  (result (json-read-from-string response-string)))
       (mapcar 'render-item result))))
 
 (defun sprintly-list-items ()
@@ -97,14 +108,14 @@
 			     sprintly-product-id
 			     sprintly-user-id
 			     )
-		     'sprintly-show-item-list)
-    ))
+		     'sprintly-show-item-list)))
 
 (defun sprintly ()
   (interactive)
   (with-current-buffer (get-buffer-create sprintly-buffer-name)
     (sprintly-mode)
     (setq truncate-lines 1) ;; don't wrap for long lines
+    (toggle-read-only 1)
     (sprintly-list-items)
     (switch-to-buffer (current-buffer))))
 
